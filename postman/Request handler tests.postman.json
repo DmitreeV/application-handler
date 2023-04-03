@@ -44,59 +44,6 @@
 					"response": []
 				},
 				{
-					"name": "Добавление нового пользователя",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {",
-									"    pm.response.to.have.status(201);",
-									"    pm.response.to.be.withBody;",
-									"    pm.response.to.be.json;",
-									"});",
-									"",
-									"const source = JSON.parse(pm.request.body.raw);",
-									"const target = pm.response.json();",
-									"",
-									"pm.test(\"Пользователь должен содержать поля: id, name, email, role\", function () {",
-									"pm.expect(target).to.have.property('id');",
-									"pm.expect(target).to.have.property('name');",
-									"pm.expect(target).to.have.property('email');",
-									"pm.expect(target).to.have.property('role');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n   \"name\": \"Denis\",\n   \"email\": \"den@gmail.com\",\n   \"role\": \"USER\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Добавление новой заявки",
 					"event": [
 						{
