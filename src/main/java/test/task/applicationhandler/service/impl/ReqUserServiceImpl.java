@@ -9,12 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import test.task.applicationhandler.dto.ReqCreateDto;
 import test.task.applicationhandler.dto.ReqDto;
 import test.task.applicationhandler.dto.ReqUpdateDto;
-import test.task.applicationhandler.exception.ConflictException;
-import test.task.applicationhandler.exception.NotFoundException;
+import test.task.applicationhandler.error.exception.AccessException;
+import test.task.applicationhandler.error.exception.ConflictException;
+import test.task.applicationhandler.error.exception.NotFoundException;
 import test.task.applicationhandler.mapper.ReqMapper;
 import test.task.applicationhandler.model.ReqState;
 import test.task.applicationhandler.model.Request;
 import test.task.applicationhandler.model.User;
+import test.task.applicationhandler.model.UserRole;
 import test.task.applicationhandler.repository.ReqRepository;
 import test.task.applicationhandler.repository.UserRepository;
 import test.task.applicationhandler.service.ReqUserService;
@@ -40,12 +42,15 @@ public class ReqUserServiceImpl implements ReqUserService {
     @Transactional
     public ReqDto createRequest(Long userId, ReqCreateDto reqCreateDto) {
         User user = getUser(userId);
+        if (!user.getRole().equals(UserRole.USER)) {
+            throw new AccessException("Access error.");
+        }
         Request request = reqMapper.toRequest(reqCreateDto);
 
         request.setUser(user);
         request.setCreatedOn(LocalDateTime.now());
-
-        log.info("Saved new request with id : {}.", request.getId());
+        request.setState(ReqState.DRAFT);
+        log.info("Saved new request {}.", reqCreateDto);
         return reqMapper.toReqDto(reqRepository.save(request));
     }
 
@@ -70,22 +75,22 @@ public class ReqUserServiceImpl implements ReqUserService {
     }
 
     @Override
-    public List<ReqDto> getAllRequestsByUserIdWithSortFromNewToOld(Long userId, Integer from, Integer size) {
+    public List<ReqDto> getAllRequestsByUserIdWithSortFromOldToNew(Long userId, Integer from, Integer size) {
         getUser(userId);
         Page<Request> requests = reqRepository.findAllByUserIdOrderByCreatedOnAsc(userId, PageRequest.of(from / size, size));
 
-        log.info("Received a list of all-user with id {} requests sorted from newer to older.", userId);
+        log.info("Received a list of all-user with id {} requests sorted from older to newer.", userId);
         return requests.stream()
                 .map(reqMapper::toReqDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ReqDto> getAllRequestsByUserIdWithSortFromOldToNew(Long userId, Integer from, Integer size) {
+    public List<ReqDto> getAllRequestsByUserIdWithSortFromNewToOld(Long userId, Integer from, Integer size) {
         getUser(userId);
         Page<Request> requests = reqRepository.findAllByUserIdOrderByCreatedOnDesc(userId, PageRequest.of(from / size, size));
 
-        log.info("Received a list of all-user with id {} requests sorted from older to newer.", userId);
+        log.info("Received a list of all-user with id {} requests sorted from newer to older.", userId);
         return requests.stream()
                 .map(reqMapper::toReqDto)
                 .collect(Collectors.toList());
@@ -97,9 +102,13 @@ public class ReqUserServiceImpl implements ReqUserService {
         Request request = reqRepository.findByIdAndUserId(reqId, userId)
                 .orElseThrow(() -> new ConflictException("Only the creator of the request can submit them for consideration."));
         request.setState(SENT);
+
+        String stringForOperator = request.getUserMessage().replace("", "-");
+        request.setUserMessage(stringForOperator);
         log.info("The request has been sent to the consideration.");
         return reqMapper.toReqDto(reqRepository.save(request));
     }
+
 
     @Override
     @Transactional

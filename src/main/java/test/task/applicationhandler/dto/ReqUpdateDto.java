@@ -4,7 +4,6 @@ import lombok.*;
 import test.task.applicationhandler.model.ReqState;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -23,6 +22,5 @@ public class ReqUpdateDto {
     @NotBlank(message = "'user_message' can not be blank")
     private String userMessage;
 
-    @NotNull
     private ReqState state;
 }

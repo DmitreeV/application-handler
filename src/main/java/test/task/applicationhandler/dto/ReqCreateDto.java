@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ReqCreateDto {
 
     @NotBlank(message = "'name' can not be blank")

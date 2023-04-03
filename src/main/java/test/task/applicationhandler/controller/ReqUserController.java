@@ -41,18 +41,18 @@ public class ReqUserController {
 
     @GetMapping("/new")
     @ResponseStatus(value = HttpStatus.OK)
-    List<ReqDto> getAllRequestsByUserIdWithSortFromNewToOld(@PathVariable Long userId,
-                                                            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                                            @Positive @RequestParam(defaultValue = "5") Integer size) {
-        return reqUserService.getAllRequestsByUserIdWithSortFromNewToOld(userId, from, size);
-    }
-
-    @GetMapping("/old")
-    @ResponseStatus(value = HttpStatus.OK)
     List<ReqDto> getAllRequestsByUserIdWithSortFromOldToNew(@PathVariable Long userId,
                                                             @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                             @Positive @RequestParam(defaultValue = "5") Integer size) {
         return reqUserService.getAllRequestsByUserIdWithSortFromOldToNew(userId, from, size);
+    }
+
+    @GetMapping("/old")
+    @ResponseStatus(value = HttpStatus.OK)
+    List<ReqDto> getAllRequestsByUserIdWithSortFromNewToOld(@PathVariable Long userId,
+                                                            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                            @Positive @RequestParam(defaultValue = "5") Integer size) {
+        return reqUserService.getAllRequestsByUserIdWithSortFromNewToOld(userId, from, size);
     }
 
     @DeleteMapping("/{reqId}")

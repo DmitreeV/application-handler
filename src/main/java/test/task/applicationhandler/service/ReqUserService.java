@@ -18,6 +18,6 @@ public interface ReqUserService {
 
     ReqDto sentRequestForConsideration(Long reqId, Long userId);
 
-    void userDeleteRequest(Long reqId, Long userId); 
+    void userDeleteRequest(Long reqId, Long userId);
 }
 

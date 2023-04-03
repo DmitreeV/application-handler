@@ -1,4 +1,4 @@
-package test.task.applicationhandler.exception;
+package test.task.applicationhandler.error.exception;
 
 public class ConflictException extends RuntimeException {
     public ConflictException(String message) {
