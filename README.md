@@ -1,3 +1,25 @@
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/github_username/repo_name">
+   <img src="https://x-lines.ru/letters/i/cyrillicscript/0412/010128/40/0/kj1zn7mfqp4ny4dbp31ga3m1.png">
+
+
+  </a>
+
+  <p align="center">
+  </p>
+</div>
+
+</details>
+<details><summary><b>Содержание</b></summary>
+  
+    1. Краткое описание
+    2. Стек-технологий
+    3. Функциональности проекта
+    4. Системные требования
+    
+</details>
 
 ## Краткое описание
 
